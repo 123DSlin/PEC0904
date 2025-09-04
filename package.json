@@ -1,0 +1,26 @@
+{
+  "name": "network-config-analyzer",
+  "version": "1.0.0",
+  "description": "Network configuration analyzer for extracting prefixes and PECs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "install-server": "npm install",
+    "install-all": "npm run install-server && npm run install-client"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "cors": "^2.8.5",
+    "ip-address": "^8.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["network", "configuration", "prefix", "trie", "pec"],
+  "author": "",
+  "license": "MIT"
+}
