@@ -4,12 +4,14 @@ import './App.css';
 import FileUpload from './components/FileUpload';
 import ConfigDisplay from './components/ConfigDisplay';
 import TrieTreeVisualization from './components/TrieTreeVisualization';
+import EnhancedTrieTreeVisualization from './components/EnhancedTrieTreeVisualization';
 import PECDisplay from './components/PECDisplay';
 
 function App() {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [visualizationType, setVisualizationType] = useState('enhanced');
 
   const handleFileUpload = async (file) => {
     setLoading(true);
@@ -61,7 +63,35 @@ function App() {
         {analysisResult && (
           <>
             <ConfigDisplay configData={analysisResult.configData} />
-            <TrieTreeVisualization treeData={analysisResult.trieTree} />
+            
+            {/* 选择可视化组件 */}
+            <div className="visualization-toggle">
+              <h2>选择可视化方式</h2>
+              <div className="toggle-buttons">
+                <button 
+                  className="toggle-btn active" 
+                  onClick={() => setVisualizationType('enhanced')}
+                >
+                  🎨 增强版Trie树
+                </button>
+                <button 
+                  className="toggle-btn" 
+                  onClick={() => setVisualizationType('basic')}
+                >
+                  📊 基础版Trie树
+                </button>
+              </div>
+            </div>
+            
+            {visualizationType === 'enhanced' ? (
+              <EnhancedTrieTreeVisualization 
+                trieData={analysisResult.trieTree} 
+                onNodeClick={(node) => console.log('Node clicked:', node)}
+              />
+            ) : (
+              <TrieTreeVisualization treeData={analysisResult.trieTree} />
+            )}
+            
             <PECDisplay pecs={analysisResult.pecs} />
           </>
         )}

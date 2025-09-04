@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>增强版Trie树可视化测试</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .demo-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        
+        .demo-header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .demo-content {
+            padding: 30px;
+        }
+        
+        .trie-tree-demo {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .trie-node {
+            width: 120px;
+            min-height: 80px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: white;
+            text-align: center;
+        }
+        
+        .trie-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .trie-node.static-route {
+            background: #4CAF50;
+            border: 3px solid #1976D2;
+        }
+        
+        .trie-node.ospf {
+            background: #2196F3;
+            border: 3px solid #1976D2;
+        }
+        
+        .trie-node.interface {
+            background: #9C27B0;
+            border: 3px solid #1976D2;
+        }
+        
+        .trie-node.intermediate {
+            background: #E0E0E0;
+            border: 2px solid #BDBDBD;
+            color: #333;
+        }
+        
+        .node-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .node-prefix {
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .source-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .trie-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 15px;
+        }
+        
+        .branch-label {
+            background: #1976D2;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+        }
+        
+        .branch-line {
+            width: 2px;
+            height: 20px;
+            background: #1976D2;
+            margin-bottom: 10px;
+        }
+        
+        .legend {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .legend h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #ddd;
+        }
+        
+        .legend-label {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .features {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .features h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e1e5e9;
+            color: #555;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list li::before {
+            content: "✅";
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🎨 增强版Trie树可视化</h1>
+            <p>支持节点颜色标注、点击交互和详细信息显示</p>
+        </div>
+        
+        <div class="demo-content">
+            <div class="trie-tree-demo">
+                <!-- 根节点 -->
+                <div class="trie-node intermediate">
+                    <div class="node-label">Root</div>
+                    <div class="node-prefix">bit 0</div>
+                </div>
+                
+                <!-- 第一层分支 -->
+                <div class="trie-branch">
+                    <div class="branch-label">1</div>
+                    <div class="branch-line"></div>
+                    <div class="trie-node static-route">
+                        <div class="node-label">bit 1</div>
+                        <div class="node-prefix">128.0.0.0/1</div>
+                        <div class="source-badge">static-route</div>
+                    </div>
+                </div>
+                
+                <!-- 第二层分支 -->
+                <div class="trie-branch">
+                    <div class="branch-label">0</div>
+                    <div class="branch-line"></div>
+                    <div class="trie-node static-route">
+                        <div class="node-label">bit 2</div>
+                        <div class="node-prefix">160.0.0.0/3</div>
+                        <div class="source-badge">static-route</div>
+                    </div>
+                </div>
+                
+                <div class="trie-branch">
+                    <div class="branch-label">1</div>
+                    <div class="branch-line"></div>
+                    <div class="trie-node static-route">
+                        <div class="node-label">bit 3</div>
+                        <div class="node-prefix">224.0.0.0/3</div>
+                        <div class="source-badge">static-route</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <h3>🎨 节点颜色图例</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #4CAF50;"></div>
+                        <span class="legend-label">绿色 - 静态路由 (Static Route)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #2196F3;"></div>
+                        <span class="legend-label">蓝色 - OSPF</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #FF9800;"></div>
+                        <span class="legend-label">橙色 - BGP</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #9C27B0;"></div>
+                        <span class="legend-label">紫色 - 接口 (Interface)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #F44336;"></div>
+                        <span class="legend-label">红色 - 访问控制列表 (ACL)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #E0E0E0;"></div>
+                        <span class="legend-label">灰色 - 中间节点</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features">
+                <h3>🚀 主要特性</h3>
+                <ul class="feature-list">
+                    <li><strong>颜色编码</strong> - 不同配置类型用不同颜色表示，一目了然</li>
+                    <li><strong>交互式节点</strong> - 点击节点查看详细信息</li>
+                    <li><strong>悬停效果</strong> - 鼠标悬停时节点放大，突出显示</li>
+                    <li><strong>详细信息面板</strong> - 显示节点的完整配置信息</li>
+                    <li><strong>响应式设计</strong> - 支持不同屏幕尺寸</li>
+                    <li><strong>动画效果</strong> - 平滑的过渡和动画</li>
+                    <li><strong>图例说明</strong> - 清晰的颜色含义说明</li>
+                    <li><strong>智能合并</strong> - 自动合并相似的PEC节点</li>
+                </ul>
+            </div>
+            
+            <div class="features">
+                <h3>💡 使用说明</h3>
+                <ul class="feature-list">
+                    <li><strong>点击节点</strong> - 查看节点的详细配置信息</li>
+                    <li><strong>悬停节点</strong> - 节点会放大并显示提示信息</li>
+                    <li><strong>颜色识别</strong> - 通过颜色快速识别配置类型</li>
+                    <li><strong>路径追踪</strong> - 蓝色标签显示二进制路径</li>
+                    <li><strong>信息面板</strong> - 右侧显示选中节点的详细信息</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 添加点击事件演示
+        document.querySelectorAll('.trie-node').forEach(node => {
+            node.addEventListener('click', function() {
+                // 移除其他节点的选中状态
+                document.querySelectorAll('.trie-node').forEach(n => n.style.border = '');
+                
+                // 添加选中状态
+                this.style.border = '3px solid #ff4081';
+                this.style.transform = 'scale(1.1)';
+                
+                // 显示节点信息
+                const prefix = this.querySelector('.node-prefix')?.textContent || 'N/A';
+                const type = this.querySelector('.source-badge')?.textContent || '中间节点';
+                
+                alert(`节点信息:\n前缀: ${prefix}\n类型: ${type}\n\n在实际应用中，这里会显示详细的配置信息面板！`);
+                
+                // 恢复状态
+                setTimeout(() => {
+                    this.style.border = '';
+                    this.style.transform = '';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

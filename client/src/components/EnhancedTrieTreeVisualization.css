@@ -1,0 +1,390 @@
+.enhanced-trie-visualization {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.trie-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.trie-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.trie-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.trie-header p {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.trie-content {
+  display: flex;
+  min-height: 600px;
+}
+
+.trie-tree-container {
+  flex: 2;
+  padding: 30px;
+  overflow: auto;
+  background: #fafbfc;
+}
+
+.trie-sidebar {
+  flex: 1;
+  background: white;
+  border-left: 1px solid #e1e5e9;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Trie树样式 */
+.trie-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.trie-children {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  position: relative;
+}
+
+.trie-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 15px;
+  position: relative;
+}
+
+.branch-label {
+  background: #1976d2;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}
+
+.branch-line {
+  width: 2px;
+  height: 20px;
+  background: #1976d2;
+  margin-bottom: 10px;
+}
+
+/* 节点样式 */
+.trie-node {
+  width: 120px;
+  min-height: 80px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.trie-node:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.trie-node.selected {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  border: 3px solid #ff4081 !important;
+}
+
+.trie-node.hovered {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.node-content {
+  text-align: center;
+  padding: 8px;
+  width: 100%;
+}
+
+.node-label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.node-prefix {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  word-break: break-all;
+}
+
+.node-sources {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+}
+
+.source-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* 图例样式 */
+.trie-legend {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.trie-legend h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid #ddd;
+}
+
+.legend-label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* 节点信息面板样式 */
+.node-info-panel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.node-info-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.node-info-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.node-info-content {
+  padding: 20px;
+}
+
+.info-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.info-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.info-section h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.info-section p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.source-item {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 8px 0;
+  border-left: 3px solid #667eea;
+}
+
+.source-item p {
+  margin: 3px 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .trie-content {
+    flex-direction: column;
+  }
+  
+  .trie-sidebar {
+    border-left: none;
+    border-top: 1px solid #e1e5e9;
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-trie-visualization {
+    padding: 10px;
+  }
+  
+  .trie-header {
+    padding: 20px;
+  }
+  
+  .trie-header h2 {
+    font-size: 2rem;
+  }
+  
+  .trie-tree-container {
+    padding: 20px;
+  }
+  
+  .trie-node {
+    width: 100px;
+    min-height: 70px;
+  }
+  
+  .trie-children {
+    flex-direction: column;
+  }
+  
+  .trie-branch {
+    margin: 10px 0;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.trie-node {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.node-info-panel {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 滚动条样式 */
+.trie-tree-container::-webkit-scrollbar,
+.trie-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.trie-tree-container::-webkit-scrollbar-track,
+.trie-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.trie-tree-container::-webkit-scrollbar-thumb,
+.trie-sidebar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.trie-tree-container::-webkit-scrollbar-thumb:hover,
+.trie-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 无数据状态 */
+.no-data {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.no-data::before {
+  content: "📊";
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 20px;
+}
