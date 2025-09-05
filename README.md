@@ -1,6 +1,17 @@
 # Network Configuration Analyzer
 
 一个用于分析网络设备配置文件的工具，可以提取网络前缀并构建 Trie 树来识别 Packet Equivalence Classes (PECs)。
+简单实例（用的很小的配置文件）
+
+提取ACL：
+<img width="587" height="787" alt="image" src="https://github.com/user-attachments/assets/3601ccbe-1f41-4d5e-9f2c-73c7c5a05311" />
+创建TRIE_tree 划分PEC
+<img width="583" height="697" alt="image" src="https://github.com/user-attachments/assets/4e1e7b37-5038-4318-a893-bf4c0c9bab29" />
+<img width="588" height="246" alt="image" src="https://github.com/user-attachments/assets/38a9f3eb-b5a1-4638-985d-592615abee90" />
+
+
+
+
 
 ## 功能特性
 
@@ -44,8 +55,7 @@ npm start        # 启动服务器
 
 ### 3. 访问应用
 
-- 前端界面: http://localhost:3000
-- 后端 API: http://localhost:3001
+- http://localhost:3002
 
 ## 使用方法
 
@@ -155,4 +165,3 @@ MIT License
 
 ## 贡献
 
-欢迎提交 Issue 和 Pull Request 来改进这个项目。
